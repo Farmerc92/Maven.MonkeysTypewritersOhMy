@@ -10,9 +10,9 @@ public class SafeCopier extends Copier {
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
         while(stringIterator.hasNext()){
-            if (stringIterator.hasNext()){
+            synchronized (this) {
                 copied += stringIterator.next() + " ";
             }
         }
