@@ -29,30 +29,21 @@ public class MonkeyTypewriter {
         // A Tale Of Two Cities.
         SafeCopier safeCopier = new SafeCopier(introduction);
         UnsafeCopier unsafeCopier = new UnsafeCopier(introduction);
-        ThreadGroup safeThreads =  new ThreadGroup("Safe Threads");
-        ThreadGroup unsafeThreads = new ThreadGroup("Unsafe Threads");
+        Thread[] safeThreads = new Thread[5];
+        for (int i = 0; i < 5; i++) {
+            safeThreads[i] = new Thread(safeCopier);
+        }
+        for (int i = 0; i < 5; i++) {
+            safeThreads[i].start();
+        }
 
-        Thread safe1 = new Thread(safeThreads, safeCopier);
-        Thread safe2 = new Thread(safeThreads, safeCopier);
-        Thread safe3 = new Thread(safeThreads, safeCopier);
-        Thread safe4 = new Thread(safeThreads, safeCopier);
-        Thread safe5 = new Thread(safeThreads, safeCopier);
-        safe1.start();
-        safe2.start();
-        safe3.start();
-        safe4.start();
-        safe5.start();
-
-        Thread unsafe1 = new Thread(unsafeThreads, unsafeCopier);
-        Thread unsafe2 = new Thread(unsafeThreads, unsafeCopier);
-        Thread unsafe3 = new Thread(unsafeThreads, unsafeCopier);
-        Thread unsafe4 = new Thread(unsafeThreads, unsafeCopier);
-        Thread unsafe5 = new Thread(unsafeThreads, unsafeCopier);
-        unsafe1.start();
-        unsafe2.start();
-        unsafe3.start();
-        unsafe4.start();
-        unsafe5.start();
+        Thread[] unsafeThreads = new Thread[5];
+        for (int i = 0; i < 5; i++) {
+            unsafeThreads[i] = new Thread(unsafeCopier);
+        }
+        for (int i = 0; i < 5; i++){
+            unsafeThreads[i].start();
+        }
 
         // This wait is here because main is still a thread and we want the main method to print the finished copies
         // after enough time has passed.
@@ -61,8 +52,8 @@ public class MonkeyTypewriter {
         } catch(InterruptedException e) {
             System.out.println("MAIN INTERRUPTED");
         }
-        System.out.println(safeCopier.copied + "\n\n\n");
-        System.out.println(unsafeCopier.copied);
+        System.out.println("SAFE COPY:\n" + safeCopier.copied + "\n\n\n");
+        System.out.println("UNSAFE COPY:\n" + unsafeCopier.copied);
         // Print out the copied versions here.
     }
 }
